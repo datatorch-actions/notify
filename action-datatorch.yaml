@@ -1,0 +1,42 @@
+name: Notify
+author: DataTorch
+description: Sends a message to a Slack incoming webhook or an email via SMTP.
+inputs:
+  channel:
+    type: string
+    description: Delivery channel — "slack" or "email".
+    default: slack
+  message:
+    type: string
+    description: The message body to send.
+    required: true
+  title:
+    type: string
+    description: Optional title — Slack renders it as a bold first line; email uses it as the subject.
+    required: false
+    default: ""
+  to:
+    type: string
+    description: Email recipient address(es), comma-separated. Required when channel is "email"; ignored for Slack.
+    required: false
+    default: ""
+outputs:
+  ok:
+    type: boolean
+    description: True when the notification was delivered (failures fail the step).
+env:
+  SLACK_WEBHOOK_URL:
+    description: Needed when channel is "slack" — a Slack incoming-webhook URL.
+  SMTP_HOST:
+    description: Needed when channel is "email" — SMTP server hostname.
+  SMTP_PORT:
+    description: Optional for "email" — SMTP port (defaults to 587).
+  SMTP_USER:
+    description: Optional for "email" — SMTP username (also the default sender).
+  SMTP_PASS:
+    description: Optional for "email" — SMTP password.
+  SMTP_FROM:
+    description: Needed for "email" unless SMTP_USER is set — the From address.
+runs:
+  using: python
+  main: main.py
